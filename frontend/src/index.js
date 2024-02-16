@@ -3,17 +3,19 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import P_Dashboard from './pages/p_dashboard';
-import H_Dashboard from './pages/h_dashboard';
+import Flujo from './pages/flujo';
+import Vehiculo from './pages/vehiculo';
+import Persona from './pages/persona';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <div>
     <BrowserRouter>
       <Routes>
-        <Route index element={<P_Dashboard />} />
-        <Route path='/index' element={<P_Dashboard />} />
-        <Route path='/historic' element={<H_Dashboard />} />
+        <Route index element={<Flujo />} />
+        <Route path='/flujo' element={<Flujo />} />
+        <Route path='/vehiculo' element={<Vehiculo />} />
+        <Route path='/persona' element={<Persona />} />
       </Routes>
     </BrowserRouter>
   </div>
