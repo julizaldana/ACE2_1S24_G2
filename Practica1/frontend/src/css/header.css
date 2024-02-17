@@ -1,0 +1,32 @@
+.btn {
+    font-size: 17px;
+    background: transparent;
+    border: none;
+    padding: 0.4em 1em;
+    color: #ffffff;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.5s ease;
+    cursor: pointer;
+  }
+  
+  .btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: #ffffff;
+    transition: 0.5s ease;
+  }
+  
+  .btn:hover {
+    color: white;
+    transition-delay: 0.5s;
+  }
+  
+  .btn:hover::before {
+    width: 100%;
+  }
+  
