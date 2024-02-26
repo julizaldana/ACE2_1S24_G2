@@ -21,7 +21,7 @@ while True:
             bytes = puerto.read(9)
             is_ingresando = bool(int.from_bytes(bytes[0:1]))  # 1:ingresado, 2:saliente
             size = int.from_bytes(bytes[1:5])  # int 1:personal, 2:mediano, 3: grande
-            color = int.from_bytes(bytes[5:9])  # int 1:rojo, 2:azul, 3:amarillo, 4:otro
+            color = int.from_bytes(bytes[5:9])  # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
             print("Leido is_ingresando:", is_ingresando, "size:",size, "color:",color)
             if is_ingresando:
                 sql = "INSERT INTO vehiculos(is_ingresado,tipo_vehiculo,rol_vehiculo,fecha_entrada) VALUES(%s,%s,%s,%s)"

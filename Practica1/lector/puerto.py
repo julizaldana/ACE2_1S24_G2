@@ -1,6 +1,5 @@
-#!/usr/bin/python3
 import serial
-import time
+#import time
 
 # Arduino official doc:https://www.arduino.cc/en/serial/begin
 # by default Arduino set 8 bit frame, parity none and 1 stop bit
@@ -15,7 +14,7 @@ puerto = serial.Serial(
 
 try:
     puerto.write(b"\x00")
-    size = 1
+    size = 2
     puerto.write(size.to_bytes(4))
     color = 1
     puerto.write(color.to_bytes(4))

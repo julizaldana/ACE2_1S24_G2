@@ -1,24 +1,26 @@
-from flask import Flask, jsonify#, request
+from flask import Flask, jsonify  # , request
 from flask_cors import CORS, cross_origin
 from datetime import datetime
 import mysql.connector
 
 app = Flask(__name__)
 CORS(app)
-mydb = mysql.connector.connect(
-    host="localhost",
-    port="5055",
-    user="root",
-    password="1234",
-    database="centinela_prueba1",
-)
-mycursor = mydb.cursor()
 
-
+def conectar():
+    return mysql.connector.connect(
+        host="localhost",
+        port="5055",
+        user="root",
+        password="1234",
+        database="centinela_prueba1",
+    )
+    
 @cross_origin
 @app.route("/ingresos", methods=["GET"])
 def get_ingresos():
-    #datos = request.json
+    # datos = request.json
+    connection = conectar()
+    mycursor = connection.cursor()
     sql = "SELECT * FROM vehiculos"
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
@@ -33,11 +35,15 @@ def get_ingresos():
         }
         for result in myresult
     ]
+    connection.close()
     return jsonify(resultados_bonitos_para_panaza)
+
 
 @cross_origin
 @app.route("/egresos", methods=["GET"])
 def get_egresos():
+    connection = conectar()
+    mycursor = connection.cursor()
     sql = "SELECT * FROM vehiculos WHERE is_ingresado='0'"
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
@@ -52,12 +58,16 @@ def get_egresos():
         }
         for result in myresult
     ]
+    connection.close()
     return jsonify(resultados_bonitos_para_panaza)
+
 
 @cross_origin
 @app.route("/graphs", methods=["GET"])
 def get_contadores():
-    #datos = request.json
+    # datos = request.json
+    connection = conectar()
+    mycursor = connection.cursor()
     datos = {
         "ocupados": 0,
         "disponibles": 0,
@@ -69,14 +79,10 @@ def get_contadores():
         "trabajador": 0,
         "catedratico": 0,
     }
-    personas_vehiculo = {
-        "personal": 1,
-        "mediano": 2,
-        "grande": 4
-    }
+    personas_vehiculo = {"personal": 1, "mediano": 2, "grande": 4}
     sql = "SELECT COUNT(*) FROM vehiculos where is_ingresado=1;"
     mycursor.execute(sql)
-    
+
     datos["ocupados"] = mycursor.fetchone()[0]
     datos["disponibles"] = 200 - datos["ocupados"]
     sql = "SELECT tipo_vehiculo, COUNT(*) FROM vehiculos group by tipo_vehiculo;"
@@ -89,8 +95,20 @@ def get_contadores():
     vehiculos_rol = mycursor.fetchall()
     for vehiculos in vehiculos_rol:
         datos[vehiculos[0]] = vehiculos[1]
+    connection.close()
     return jsonify(datos)
 
 
-if __name__ == '__main__':
+@cross_origin
+@app.route("/flujoactual", methods=["GET"])
+def get_flujos():
+    connection = conectar()
+    mycursor = connection.cursor()
+    sql = "SELECT * FROM vehiculos WHERE is_ingresado='0'"
+    mycursor.execute(sql)
+    
+    connection.close()
+
+
+if __name__ == "__main__":
     app.run(debug=True, port=5000)
