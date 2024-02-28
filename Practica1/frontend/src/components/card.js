@@ -4,22 +4,22 @@ import '../css/card.css';
 const Card = ({title, children}) => {
     return (
         <div>
-            <div class="card">
-                <div class="tools">
-                    <div class="circle">
-                        <span class="red box"></span>
+            <div className="card">
+                <div className="tools">
+                    <div className="circle">
+                        <span className="red box"></span>
                     </div>
-                    <div class="circle">
-                        <span class="yellow box"></span>
+                    <div className="circle">
+                        <span className="yellow box"></span>
                     </div>
-                    <div class="circle">
-                        <span class="green box"></span>
+                    <div className="circle">
+                        <span className="green box"></span>
                     </div>
-                    <div class="titulo">
+                    <div className="titulo">
                         {title}
                     </div>
                 </div>
-                <div class="card__content">
+                <div className="card__content">
                     {children}
                 </div>
             </div>

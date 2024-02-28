@@ -3,8 +3,8 @@ import '../css/cardT.css';
 
 const CardT = ({children}) => {
     return (
-        <div class="card1 shadow">
-            <div class="card__content">
+        <div className="card1 shadow">
+            <div className="card__content">
                 {children}
             </div>
         </div>

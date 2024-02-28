@@ -31,7 +31,8 @@ const Vehiculo = () => {
           throw new Error('Network response was not ok');
         }
         const vehiculoData = await response.json();
-        setData(vehiculoData.data);
+        console.log(vehiculoData)
+        setData(vehiculoData.datasets);
         setLabels(vehiculoData.labels);
 
       } catch (error) {
@@ -69,7 +70,7 @@ const Vehiculo = () => {
   
   // const data = {
   //   labels: labels,
-  //   datasets: [
+  //   datasest: [
   //     { 
   //       label: 'Estudiantes', 
   //       data: [20, 15, 30, 25, 35], // Datos para el conjunto de datos de estudiantes

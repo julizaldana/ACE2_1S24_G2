@@ -13,16 +13,16 @@ function Header() {
                     <Navbar.Brand href="dash">ACCESSPRO</Navbar.Brand>
                     <Nav className="me-0.25">
                         <Nav.Link href="dash">
-                            <button class="btn">TABLERO</button>
+                            <button className="btn">TABLERO</button>
                         </Nav.Link>
                         <Nav.Link href="flujo">
-                            <button class="btn">FLUJOS</button>
+                            <button className="btn">FLUJOS</button>
                         </Nav.Link>
                         <Nav.Link href="vehiculo">
-                            <button class="btn">VEHÍCULOS</button>
+                            <button className="btn">VEHÍCULOS</button>
                         </Nav.Link>
                         <Nav.Link href="persona">
-                            <button class="btn">PERSONAS</button>
+                            <button className="btn">PERSONAS</button>
                         </Nav.Link>
                     </Nav>
                 </Container>
