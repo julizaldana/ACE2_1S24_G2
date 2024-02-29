@@ -157,9 +157,10 @@ def get_vehiculo_rol_actual():
 
 
 @cross_origin
-@app.route("/historialvehiculos", methods=["GET"])
+@app.route("/historialvehiculos", methods=["POST"])
 def get_vehiculo_rol_todos():
     datos = request.json
+    print(datos["startDate"], datos["endDate"])
     connection = conectar()
     mycursor = connection.cursor()
     # fecha_inicio = datetime.strftime(datos["startDate"], "%Y-%m-%d")
