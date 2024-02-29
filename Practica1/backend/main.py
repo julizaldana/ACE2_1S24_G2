@@ -85,7 +85,7 @@ def get_contadores():
     mycursor.execute(sql)
     datos["ocupados"] = mycursor.fetchone()[0]
     datos["disponibles"] = 200 - datos["ocupados"]
-    
+
     fecha_hoy = datetime.strftime(datetime.now(), "%Y-%m-%d")
     sql = f"SELECT tipo_vehiculo, COUNT(*) FROM vehiculos where DATE_FORMAT(fecha_entrada, '%Y-%m-%d') = '{fecha_hoy}' group by tipo_vehiculo;"
     mycursor.execute(sql)
@@ -134,7 +134,9 @@ def get_vehiculo_rol_actual():
         {"label": "trabajador", "data": [], "backgroundColor": "#66ecc9"},
         {"label": "ajenos", "data": [], "backgroundColor": "#e8e279"},
     ]
-    fecha_actual = vehiculos_rol[0][0] #fecha
+    if len(vehiculos_rol) <= 0:
+        return jsonify({"labels": labels, "datasets": datasets})
+    fecha_actual = vehiculos_rol[0][0]  # fecha
     labels.append(fecha_actual)
     for vehiculos in vehiculos_rol:
         if fecha_actual != vehiculos[0]:
@@ -146,12 +148,13 @@ def get_vehiculo_rol_actual():
             labels.append(fecha_actual)
         datasets[labels_rol[vehiculos[1]]]["data"].append(vehiculos[2])
     connection.close()
-    
+
     # para validar si quedo disparejo al final
     for i in range(len(datasets)):
         if len(datasets[i]["data"]) != len(labels):
             datasets[i]["data"].append(0)
-    return jsonify({"labels":labels, "datasets":datasets})
+    return jsonify({"labels": labels, "datasets": datasets})
+
 
 @cross_origin
 @app.route("/historialvehiculos", methods=["GET"])
@@ -159,8 +162,8 @@ def get_vehiculo_rol_todos():
     datos = request.json
     connection = conectar()
     mycursor = connection.cursor()
-    #fecha_inicio = datetime.strftime(datos["startDate"], "%Y-%m-%d")
-    #fecha_final = datetime.strftime(datos["endDate"], "%Y-%m-%d")
+    # fecha_inicio = datetime.strftime(datos["startDate"], "%Y-%m-%d")
+    # fecha_final = datetime.strftime(datos["endDate"], "%Y-%m-%d")
     sql = f"""SELECT DATE_FORMAT(fecha_entrada, '%Y-%m-%d') as fecha, rol_vehiculo, COUNT(*) AS total
     FROM vehiculos
     where DATE_FORMAT(fecha_entrada, '%Y-%m-%d') >= '{datos["startDate"]}'
@@ -178,7 +181,9 @@ def get_vehiculo_rol_todos():
         {"label": "trabajador", "data": [], "backgroundColor": "#66ecc9"},
         {"label": "ajenos", "data": [], "backgroundColor": "#e8e279"},
     ]
-    fecha_actual = vehiculos_rol[0][0] #fecha
+    if len(vehiculos_rol) <= 0:
+        return jsonify({"labels": labels, "datasets": datasets})
+    fecha_actual = vehiculos_rol[0][0]  # fecha
     labels.append(fecha_actual)
     for vehiculos in vehiculos_rol:
         if fecha_actual != vehiculos[0]:
@@ -189,12 +194,43 @@ def get_vehiculo_rol_todos():
             labels.append(fecha_actual)
         datasets[labels_rol[vehiculos[1]]]["data"].append(vehiculos[2])
     connection.close()
-    
+
     # para validar si quedo disparejo al final
     for i in range(len(datasets)):
         if len(datasets[i]["data"]) != len(labels):
             datasets[i]["data"].append(0)
-    return jsonify({"labels":labels, "datasets":datasets})
+    return jsonify({"labels": labels, "datasets": datasets})
+
+
+@cross_origin
+@app.route("/personaactual", methods=["GET"])
+def get_persona_dia():
+    # datos = request.json
+    connection = conectar()
+    mycursor = connection.cursor()
+    sql = """select date_format(fecha_entrada, '%Y-%m-%d') as fecha, tipo_vehiculo, count(*) 
+    from vehiculos
+    group by fecha, tipo_vehiculo
+    order by date_format(fecha_entrada, '%Y-%m-%d');"""
+    mycursor.execute(sql)
+    personas_dia = mycursor.fetchall()
+    if len(personas_dia) <= 0:
+        return jsonify({"labels": [], "data": []})
+
+    labels = []
+    data = []
+    personas_vehiculo = {"personal": 1, "mediano": 2, "grande": 4}
+    fecha_actual = personas_dia[0][0]  # fecha
+    labels.append(fecha_actual)
+    for cantidades in personas_dia:
+        if fecha_actual != cantidades[0]:
+            fecha_actual = cantidades[0]
+            labels.append(fecha_actual)
+        if len(labels) != len(data):
+            data.append(0)
+        data[len(labels) - 1] += personas_vehiculo[cantidades[1]] * cantidades[2]
+    return jsonify({"labels": labels, "data": data})
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
