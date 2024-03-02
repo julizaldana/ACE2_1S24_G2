@@ -31,10 +31,8 @@ const Vehiculo = () => {
           throw new Error('Network response was not ok');
         }
         const vehiculoData = await response.json();
-        console.log(vehiculoData)
         setData(vehiculoData);
         setLabels(vehiculoData.labels);
-
       } catch (error) {
         console.error(error);
       }
@@ -60,7 +58,6 @@ const Vehiculo = () => {
       const vehiculoData = await response.json();
       setData(vehiculoData);
       setLabels(vehiculoData.labels);
-
     }catch (error) {
       console.error(error);
     }

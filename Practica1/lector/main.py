@@ -21,36 +21,48 @@ while True:
             bytes = puerto.read(9)
             is_ingresando = bool(int.from_bytes(bytes[0:1]))  # 1:ingresado, 2:saliente
             size = int.from_bytes(bytes[1:5])  # int 1:personal, 2:mediano, 3: grande
-            color = int.from_bytes(bytes[5:9])  # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
-            print("Leido is_ingresando:", is_ingresando, "size:",size, "color:",color)
+            color = int.from_bytes(
+                bytes[5:9]
+            )  # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
+            fecha_hoy = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+            print(fecha_hoy, "[INFO]", "esta ingresando:", is_ingresando, "size:", size, "color:", color)
             if is_ingresando:
                 sql = "INSERT INTO vehiculos(is_ingresado,tipo_vehiculo,rol_vehiculo,fecha_entrada) VALUES(%s,%s,%s,%s)"
                 values = (
                     "1",
                     size,
                     color,
-                    datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
+                    fecha_hoy,
                 )
                 mycursor.execute(sql, values)
                 mydb.commit()
-                print(mycursor.rowcount, "vehiculo ingresado")
+                print(fecha_hoy, "[INFO]", mycursor.rowcount, "vehiculo ingresado")
             else:
                 sql = "SELECT id FROM vehiculos WHERE is_ingresado=%s and tipo_vehiculo=%s and rol_vehiculo=%s;"
                 values = ("1", size, color)
                 mycursor.execute(sql, values)
                 myresult = mycursor.fetchall()
                 if len(myresult) == 0:
-                    print("El vehiculo no se encontro su ingreso")
+                    print(fecha_hoy, "[INFO]", "El vehiculo no se encontro su ingreso")
                     continue
-                sql = "UPDATE vehiculos SET is_ingresado=%s, fecha_salida=%s WHERE id=%s"
+                sql = (
+                    "UPDATE vehiculos SET is_ingresado=%s, fecha_salida=%s WHERE id=%s"
+                )
                 values = (
                     "0",
-                    datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S"),
+                    fecha_hoy,
                     myresult[0][0],
                 )
                 mycursor.execute(sql, values)
                 mydb.commit()
-                print(mycursor.rowcount, "Vehiculo saliente")
+                print(fecha_hoy, "[INFO]", mycursor.rowcount, "Vehiculo saliente")
+            sql = "SELECT COUNT(*) FROM vehiculos where is_ingresado=1;"
+            mycursor.execute(sql)
+            conteo = mycursor.fetchone()[0]
+            sqlnuevatabla = "INSERT INTO vehiculos_ingresados(fecha, conteo) values(%s, %s)"
+            mycursor.execute(sqlnuevatabla, (fecha_hoy, conteo))
+            mydb.commit()
+            print(fecha_hoy, "[INFO]", mycursor.rowcount, "Flujo insertado.")
         """ else:
             print("Leyendo", puerto.in_waiting) """
     except serial.SerialException:

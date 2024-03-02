@@ -14,9 +14,9 @@ puerto = serial.Serial(
 
 try:
     puerto.write(b"\x00")  # 1:ingresado, 2:saliente
-    size = 2# int 1:personal, 2:mediano, 3: grande
+    size = 2 # int 1:personal, 2:mediano, 3: grande
     puerto.write(size.to_bytes(4))
-    color = 3 # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
+    color = 4 # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
     puerto.write(color.to_bytes(4))
     puerto.close()
 

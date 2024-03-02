@@ -107,11 +107,38 @@ def get_contadores():
 def get_flujos():
     connection = conectar()
     mycursor = connection.cursor()
-    sql = "SELECT * FROM vehiculos WHERE is_ingresado='0'"
+    fecha_hoy = datetime.strftime(datetime.now(), "%Y-%m-%d")
+    sql = f"SELECT * FROM vehiculos_ingresados where DATE_FORMAT(fecha, '%Y-%m-%d') = '{fecha_hoy}' order by fecha;"
     mycursor.execute(sql)
-
+    registros = mycursor.fetchall()
+    data = []
+    labels = []
+    for registro in registros:
+        data.append(registro[2])
+        labels.append(registro[1])
     connection.close()
+    return jsonify({"data": data, "labels": labels})
 
+@cross_origin
+@app.route("/historialflujos", methods=["POST"])
+def get_flujos_historial():
+    datos = request.json
+    connection = conectar()
+    mycursor = connection.cursor()
+    sql = f"""SELECT * FROM vehiculos_ingresados where 
+    DATE_FORMAT(fecha, '%Y-%m-%d') >= '{datos["startDate"]}'
+    and
+    DATE_FORMAT(fecha, '%Y-%m-%d') <= '{datos["endDate"]}'
+    order by fecha;"""
+    mycursor.execute(sql)
+    registros = mycursor.fetchall()
+    data = []
+    labels = []
+    for registro in registros:
+        data.append(registro[2])
+        labels.append(registro[1])
+    connection.close()
+    return jsonify({"data": data, "labels": labels})
 
 @cross_origin
 @app.route("/vehiculoactual", methods=["GET"])
@@ -160,7 +187,6 @@ def get_vehiculo_rol_actual():
 @app.route("/historialvehiculos", methods=["POST"])
 def get_vehiculo_rol_todos():
     datos = request.json
-    print(datos["startDate"], datos["endDate"])
     connection = conectar()
     mycursor = connection.cursor()
     # fecha_inicio = datetime.strftime(datos["startDate"], "%Y-%m-%d")
@@ -232,6 +258,36 @@ def get_persona_dia():
         data[len(labels) - 1] += personas_vehiculo[cantidades[1]] * cantidades[2]
     return jsonify({"labels": labels, "data": data})
 
+@cross_origin
+@app.route("/historialpersonas", methods=["POST"])
+def get_historial_personas():
+    datos = request.json
+    connection = conectar()
+    mycursor = connection.cursor()
+    sql = f"""select date_format(fecha_entrada, '%Y-%m-%d') as fecha, tipo_vehiculo, count(*) 
+    from vehiculos
+    where DATE_FORMAT(fecha_entrada, '%Y-%m-%d') >= '{datos["startDate"]}'
+    and DATE_FORMAT(fecha_entrada, '%Y-%m-%d') <= '{datos["endDate"]}'
+    group by fecha, tipo_vehiculo
+    order by date_format(fecha_entrada, '%Y-%m-%d');"""
+    mycursor.execute(sql)
+    personas_dia = mycursor.fetchall()
+    if len(personas_dia) <= 0:
+        return jsonify({"labels": [], "data": []})
+
+    labels = []
+    data = []
+    personas_vehiculo = {"personal": 1, "mediano": 2, "grande": 4}
+    fecha_actual = personas_dia[0][0]  # fecha
+    labels.append(fecha_actual)
+    for cantidades in personas_dia:
+        if fecha_actual != cantidades[0]:
+            fecha_actual = cantidades[0]
+            labels.append(fecha_actual)
+        if len(labels) != len(data):
+            data.append(0)
+        data[len(labels) - 1] += personas_vehiculo[cantidades[1]] * cantidades[2]
+    return jsonify({"labels": labels, "data": data})
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
