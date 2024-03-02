@@ -20,9 +20,9 @@ while True:
         if puerto.in_waiting >= 9:
             bytes = puerto.read(9)
             is_ingresando = bool(int.from_bytes(bytes[0:1]))  # 1:ingresado, 2:saliente
-            size = int.from_bytes(bytes[1:5])  # int 1:personal, 2:mediano, 3: grande
+            size = int.from_bytes(bytes[1:2])  # int 1:personal, 2:mediano, 3: grande
             color = int.from_bytes(
-                bytes[5:9]
+                bytes[5:6]
             )  # int 1:rojo(estudiante), 2:azul(trabajador), 3:amarillo(profe), 4:otro
             fecha_hoy = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
             print(fecha_hoy, "[INFO]", "esta ingresando:", is_ingresando, "size:", size, "color:", color)
