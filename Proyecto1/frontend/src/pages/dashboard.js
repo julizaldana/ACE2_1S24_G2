@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import '../css/dashboard.css';
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Card from '../components/card'; // Asegúrate de importar tu componente Card aquí
 
-
-function Dashboard() {
-
-        return (
+const Dashboard = () => {
+    return (
         <div className='Contain'>
             <Container>
+                <Row>
+                    <Col lg={8} md={12}>
+                        <Card title="Heat Map" width="100%" height="85vh">
+                            {/* Contenido de la tarjeta grande */}
+                        </Card>
+                    </Col>
+                    <Col lg={4} md={12}>
+                        <Card title="Detail" width="100%" height="85vh">
+                            {/* Contenido de la tarjeta pequeña */}
+                        </Card>
+                    </Col>
+                </Row>
             </Container>
         </div>
     );
-}
+};
 
 export default Dashboard;
