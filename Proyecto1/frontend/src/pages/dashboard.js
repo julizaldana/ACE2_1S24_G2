@@ -62,13 +62,13 @@ const Dashboard = () => {
 
     // Función para consultar al backend
     const fetchBackendData = (roomNumber) => {
-        fetch(`http://localhost:8000/consult?room=${roomNumber}`)
+        fetch(`/api/consult?room=${roomNumber}`)
             .then(response => response.json())
             .then(data => {
                 // Actualizar el mapa de calor
                 setMap(data.map);
-                // Actualizar el estado o realizar acciones según la respuesta del backend
-                setState(data.state);
+                // Actualizar el estado, si es 0 es OFF, si es 1 es ON
+                setState(data.state === 0 ? "Empty" : "Occupied");
             })
             .catch(error => console.error('Error fetching data:', error));
     };
