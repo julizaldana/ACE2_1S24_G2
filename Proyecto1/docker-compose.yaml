@@ -1,0 +1,57 @@
+version: '3.1'
+
+services:
+
+  #SERVICIO DE BASE DE DATOS ========================
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - volume_mysql:/var/lib/mysql
+    networks:
+      - my_network
+    ports:
+      - 5055:3306
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - my_network
+    ports:
+      - 8080:8080
+
+  #SERVICIO DE BACKEND ==============================
+  backend:
+    image: #imagen del backend
+    container_name: backend
+    privileged: true
+    restart: always
+    volumes:
+      - type: bind
+        source: /proc
+        target: /proc
+    networks:
+      - my_network
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  
+  #SERVICIO DE FRONTEND ==============================
+  frontend:
+    image: jpanaza/frontend_ace2p1_g2
+    container_name: frontend
+    restart: always
+    networks:
+      - my_network
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+networks:
+  my_network:
+volumes:
+  volume_mysql:
