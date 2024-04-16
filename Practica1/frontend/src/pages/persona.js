@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,6 +11,8 @@ import '../css/flujo.css';
 const Persona = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [data, setData] = useState([]);
+  const [labels, setLabels] = useState([]);
 
   const handleStartDateChange = (value) => {
     setStartDate(value);
@@ -20,9 +22,51 @@ const Persona = () => {
     setEndDate(value);
   };
 
+  useEffect(() => {
+    //Funcion para obtener los datos de las personas
+    const fetchPersona = async () => {
+      try{
+        const response = await fetch('http://localhost:5000/personaactual')
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const personaData = await response.json();
+        setData(personaData.data);
+        setLabels(personaData.labels);
 
-const data = [12, 19, 3, 5, 2, 3];
-const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPersona();
+  },[]);
+
+  const handleHistorialPersonasClick = async () => {
+    try{
+      const response = await fetch('http://localhost:5000/historialpersonas',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startDate,
+          endDate,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const personaData = await response.json();
+      setData(personaData.data);
+      setLabels(personaData.labels);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+//const data = [12, 19, 3, 5, 2, 3];
+//const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
 const colors = ['#00416A'];
 
   return (
@@ -33,8 +77,8 @@ const colors = ['#00416A'];
             <div className='fechas'>
               <DateComponent label="Fecha Inicial" value={startDate} onChange={handleStartDateChange} />
               <DateComponent label="Fecha Final" value={endDate} onChange={handleEndDateChange} />
-              <button>
-                Historial Flujos
+              <button onClick={handleHistorialPersonasClick}>
+                Historial Personas
               </button>
             </div>
           </Col>

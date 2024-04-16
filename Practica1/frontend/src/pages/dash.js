@@ -116,20 +116,20 @@ function Dash() {
     const header = ['ID', 'FECHA', 'HORA', 'TIPO VEHÍCULO', 'ROL VEHÍCULO'];
 
     //Datos de la grafica de espacios ocuapdos
-    //const data_ocupados = [dataGraphs.ocupados, dataGraphs.disponibles];
-    const data_ocupados = [12, 30];
+    const data_ocupados = [dataGraphs.ocupados, dataGraphs.disponibles];
+   // const data_ocupados = [12, 30];
     const labels_ocupados = ['Ocupados', 'Disponibles'];
     const colors_ocupados = ['#269fbd', '#87f4e8'];
 
     //Datos de la grafica de personas por vehiculo
-    //const data_personas = [dataGraphs.personal, dataGraphs.mediano, dataGraphs.grande];
-    const data_personas = [10, 20, 30];
+    const data_personas = [dataGraphs.personal, dataGraphs.mediano, dataGraphs.grande];
+    //const data_personas = [10, 20, 30];
     const labels_personas = ['Personal', 'Mediano', 'Grande'];
     const colors_personas = ['#00c598', '#12b3ab', '#0da9d9'];
 
     //Datos de la grafica de vehiculos por rol  
-    //const data_rol = [dataGraphs.ajenos, dataGraphs.estudiante, dataGraphs.trabajador, dataGraphs.catedratico];
-    const data_rol = [10, 3, 6, 5];
+    const data_rol = [dataGraphs.ajenos, dataGraphs.estudiante, dataGraphs.trabajador, dataGraphs.catedratico];
+    //const data_rol = [10, 3, 6, 5];
     const labels_rol = ['Ajenos', 'Estudiante', 'Trabajador', 'Catedrátrico'];
     const colors_rol = ['#76aee1', '#47d4f5', '#66ecc9', '#e8e279'];
     return (
