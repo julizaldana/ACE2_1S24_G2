@@ -1,10 +1,12 @@
-FROM python:latest as build
+FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 
-WORKDIR /python-docker
+WORKDIR /code
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt /code
 RUN pip3 install -r requirements.txt
 
 COPY . .
+
+EXPOSE 5000
 
 CMD [ "python3", "main.py"]
