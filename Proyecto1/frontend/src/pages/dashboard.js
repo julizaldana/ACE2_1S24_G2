@@ -6,6 +6,17 @@ import '../css/dashboard.css';
 
 const Dashboard = () => {
 
+    // const jsondata = {
+    //     "no_habitacion": 1,
+    //     "tamano_x": 15,
+    //     "tamano_y": 20,
+    //     "pasadas_total": 10,
+    //     "coordenadas": [
+    //         {"x": 1, "y": 15, "pasadas": 5},
+    //         {"x": 10, "y": 15, "pasadas": 2}
+    //     ]
+    // }
+
     const mapdata = [
         [1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1],
         [3, 3, 3, 3, 3, 3, 9, 9, 9, 3, 3, 3, 3, 3, 3],
@@ -31,6 +42,21 @@ const Dashboard = () => {
     const [type, setType] = useState("");
     const [state, setState] = useState("");
     const [map, setMap] = useState(mapdata);
+    const [pasadas, setPasadas] = useState(10);
+
+    // Funcion para crear la matriz
+
+    function createMatrix(x,y,coordenadas){
+        // Crear una matriz vacía inicializada con ceros
+        const matrix = Array.from({ length: x }, () => Array(y).fill(0));
+
+        // Llenar la matriz con las coordenadas de las pasadas
+        coordenadas.forEach(coordenada => {
+            matrix[coordenada.x][coordenada.y] = coordenada.pasadas;
+        });
+        //console.log(matrix);
+        return matrix;
+    }
 
     //Funcion para manejar las habitaciones
     const handleRoom = (roomNumber, roomType) => {
@@ -42,7 +68,7 @@ const Dashboard = () => {
         const timer = setInterval(() => {
             fetchBackendData(roomNumber);
             startTimer();
-        }, 500);
+        }, 1000);
 
         // Funcion para inciar un contador de tiempo
         const startTimer = () => {
@@ -62,13 +88,21 @@ const Dashboard = () => {
 
     // Función para consultar al backend
     const fetchBackendData = (roomNumber) => {
-        fetch(`/api/consult?room=${roomNumber}`)
+        fetch(`/api/habitaciones/${roomNumber}`)
             .then(response => response.json())
             .then(data => {
-                // Actualizar el mapa de calor
-                setMap(data.map);
-                // Actualizar el estado, si es 0 es OFF, si es 1 es ON
-                setState(data.state === 0 ? "Empty" : "Occupied");
+                // Obtener el número total de pasadas
+                setPasadas(data.pasadas_total);
+                // Se setea el mapa con la matriz creada
+                setMap(createMatrix(data.tamano_x, data.tamano_y, data.coordenadas));
+
+                // Si coordenas es mayor a 0 se setea el estado como "Ocupado", sino como "Desocupado"
+                if (data.coordenadas.length > 0) {
+                    setState("Occupied");
+                }
+                else {
+                    setState("Empty");
+                }
             })
             .catch(error => console.error('Error fetching data:', error));
     };
@@ -80,7 +114,7 @@ const Dashboard = () => {
                     <Col lg={8} md={12}>
                         <Card title="Heat Map" width="100%" height="85vh">
                             {/* Contenido de la tarjeta grande */}
-                            <HeatMapChart data={map}/>
+                            <HeatMapChart data={map} maxValue={pasadas}/>
                         </Card>
                     </Col>
                     <Col lg={4} md={12}>

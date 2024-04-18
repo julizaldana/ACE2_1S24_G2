@@ -31,6 +31,19 @@ function Historic() {
     const [endDate, setEndDate] = useState("")
     const [map, setMap] = useState(mapdata);
     const [room, setRoom] = useState(null);
+    const [pasadas, setPasadas] = useState(10);
+
+    function createMatrix(x,y,coordenadas){
+        // Crear una matriz vacía inicializada con ceros
+        const matrix = Array.from({ length: x }, () => Array(y).fill(0));
+
+        // Llenar la matriz con las coordenadas de las pasadas
+        coordenadas.forEach(coordenada => {
+            matrix[coordenada.x][coordenada.y] = coordenada.pasadas;
+        });
+        //console.log(matrix);
+        return matrix;
+    }
 
     const handleStartDate = (value) => {
         setStartDate(value)
@@ -43,10 +56,18 @@ function Historic() {
     const handleRoom = (roomNumber) => {        
         if (startDate && endDate) {
             setRoom(roomNumber)
-            fetch(`/api/historic?room=${roomNumber}&start=${startDate}&end=${endDate}`)
+            fetch(`/api/habitaciones/${roomNumber}?start=${startDate}&end=${endDate}`,
+                {
+                    method: 'PUT',
+                })
                 .then(response => response.json())
                 .then(data => {
-                    setMap(data.map)
+                    // Obtener el numero total de pasadas
+                    setPasadas(data.pasadas_total);
+
+                    // Se setea el mapa con la matriz creada
+                    setMap(createMatrix(data.tamano_x, data.tamano_y, data.coordenadas));
+
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
@@ -63,7 +84,7 @@ function Historic() {
                 <Row>
                     <Col lg={8} md={12}>
                         <Card title={"Historic Data " + (room ? `Room ${room}` : "")} width={"100%"} height={"85vh"}>
-                            <HeatMapChart data={map}/>
+                            <HeatMapChart data={map} maxValue={pasadas}/>
                         </Card>
                     </Col>
                     <Col lg={4} md={12}>
