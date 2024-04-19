@@ -20,7 +20,7 @@ habitacion_actual = 1
 
 def conectar():
     return mysql.connector.connect(
-        host="localhost",
+        host="db",
         port="5055",
         user="root",
         password="1234",

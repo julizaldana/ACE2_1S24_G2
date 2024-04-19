@@ -3,9 +3,9 @@ version: '3.1'
 services:
 
   backend:
-    build:
-      context: backend
-      target: builder
+    build: ./api/
+    ports:
+      - 5000:5000
 
   db:
     image: mysql
@@ -16,7 +16,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1234
     volumes:
-      - ./data:/var/lib/mysql
+      - ./api/data:/var/lib/mysql
     ports:
       - 5055:3306
 
