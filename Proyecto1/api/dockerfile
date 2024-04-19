@@ -9,9 +9,14 @@ COPY . .
 
 ENV FLASK_APP main.py
 ENV FLASK_ENV development
-ENV FLASK_RUN_PORT 5000
+ENV FLASK_RUN_PORT 8000
 ENV FLASK_RUN_HOST 0.0.0.0
 
-EXPOSE 5000
+EXPOSE 8000
 
 CMD ["flask", "run"]
+
+#Comandos de docker
+#docker build -t jpanaza/backend_ace2p1_g2:latest .
+#docker push jpanaza/backend_ace2p1_g2:latest
+#docker run -p 8000:8000 backend_ace2p1_g2
