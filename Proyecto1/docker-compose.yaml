@@ -25,7 +25,7 @@ services:
 
   #SERVICIO DE BACKEND ==============================
   backend:
-    image: #imagen del back
+    image: jj#imagen del back
     container_name: backend
     privileged: true
     restart: always
