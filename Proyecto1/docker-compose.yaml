@@ -14,25 +14,25 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
     volumes:
       - ./api/data:/var/lib/mysql
+    networks:
+      - my_network
     ports:
       - 5055:3306
 
   adminer:
     image: adminer
     restart: always
+    networks:
+      - my_network
     ports:
       - 8080:8080
 
   #SERVICIO DE BACKEND ==============================
   backend:
-    image: jpanaza/backend_ace2p1_g2
+    image: jpanaza/backend_ace2p1_g2:latest
     container_name: backend
     privileged: true
     restart: always
-    volumes:
-      - type: bind
-        source: /proc
-        target: /proc
     networks:
       - my_network
     ports:
@@ -42,7 +42,7 @@ services:
   
   #SERVICIO DE FRONTEND ==============================
   frontend:
-    image: jpanaza/frontend_ace2p1_g2
+    image: jpanaza/frontend_ace2p1_g2:latest
     container_name: frontend
     restart: always
     networks:
