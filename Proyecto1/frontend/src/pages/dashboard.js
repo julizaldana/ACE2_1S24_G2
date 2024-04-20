@@ -88,9 +88,16 @@ const Dashboard = () => {
 
     // Función para consultar al backend
     const fetchBackendData = (roomNumber) => {
-        fetch(`/api/habitaciones/${roomNumber}`,
+        // Obtener la fecha actual
+        const currentDate = new Date();
+        // Formatear la fecha actual
+        const formattedDate = currentDate.toISOString().split('T')[0];
+
+        console.log(formattedDate);
+        // Mandar la fecha actual al backend
+        fetch(`/api/habitaciones/${roomNumber}?start=${formattedDate}`,
             {
-                method: 'PUT',
+                method: 'GET',
             })
             .then(response => response.json())
             .then(data => {
