@@ -88,7 +88,10 @@ const Dashboard = () => {
 
     // Función para consultar al backend
     const fetchBackendData = (roomNumber) => {
-        fetch(`/api/habitaciones/${roomNumber}`)
+        fetch(`/api/habitaciones/${roomNumber}`,
+            {
+                method: 'PUT',
+            })
             .then(response => response.json())
             .then(data => {
                 // Obtener el número total de pasadas

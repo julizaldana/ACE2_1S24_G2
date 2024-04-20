@@ -58,7 +58,7 @@ function Historic() {
             setRoom(roomNumber)
             fetch(`/api/habitaciones/${roomNumber}?start=${startDate}&end=${endDate}`,
                 {
-                    method: 'PUT',
+                    method: 'GET',
                 })
                 .then(response => response.json())
                 .then(data => {
