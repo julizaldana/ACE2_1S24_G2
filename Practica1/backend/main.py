@@ -9,8 +9,8 @@ CORS(app)
 
 def conectar():
     return mysql.connector.connect(
-        host="localhost",
-        port="5055",
+        host="db",
+        port="3306",
         user="root",
         password="1234",
         database="centinela_prueba1",
@@ -18,7 +18,7 @@ def conectar():
 
 
 @cross_origin
-@app.route("/ingresos", methods=["GET"])
+@app.route("/api/ingresos", methods=["GET"])
 def get_ingresos():
     # datos = request.json
     connection = conectar()
@@ -42,7 +42,7 @@ def get_ingresos():
 
 
 @cross_origin
-@app.route("/egresos", methods=["GET"])
+@app.route("/api/egresos", methods=["GET"])
 def get_egresos():
     connection = conectar()
     mycursor = connection.cursor()
@@ -65,7 +65,7 @@ def get_egresos():
 
 
 @cross_origin
-@app.route("/graphs", methods=["GET"])
+@app.route("/api/graphs", methods=["GET"])
 def get_contadores():
     # datos = request.json
     connection = conectar()
@@ -103,7 +103,7 @@ def get_contadores():
 
 
 @cross_origin
-@app.route("/flujoactual", methods=["GET"])
+@app.route("/api/flujoactual", methods=["GET"])
 def get_flujos():
     connection = conectar()
     mycursor = connection.cursor()
@@ -120,7 +120,7 @@ def get_flujos():
     return jsonify({"data": data, "labels": labels})
 
 @cross_origin
-@app.route("/historialflujos", methods=["POST"])
+@app.route("/api/historialflujos", methods=["POST"])
 def get_flujos_historial():
     datos = request.json
     connection = conectar()
@@ -141,7 +141,7 @@ def get_flujos_historial():
     return jsonify({"data": data, "labels": labels})
 
 @cross_origin
-@app.route("/vehiculoactual", methods=["GET"])
+@app.route("/api/vehiculoactual", methods=["GET"])
 def get_vehiculo_rol_actual():
     connection = conectar()
     mycursor = connection.cursor()
@@ -184,7 +184,7 @@ def get_vehiculo_rol_actual():
 
 
 @cross_origin
-@app.route("/historialvehiculos", methods=["POST"])
+@app.route("/api/historialvehiculos", methods=["POST"])
 def get_vehiculo_rol_todos():
     datos = request.json
     connection = conectar()
@@ -230,7 +230,7 @@ def get_vehiculo_rol_todos():
 
 
 @cross_origin
-@app.route("/personaactual", methods=["GET"])
+@app.route("/api/personaactual", methods=["GET"])
 def get_persona_dia():
     # datos = request.json
     connection = conectar()
@@ -259,7 +259,7 @@ def get_persona_dia():
     return jsonify({"labels": labels, "data": data})
 
 @cross_origin
-@app.route("/historialpersonas", methods=["POST"])
+@app.route("/api/historialpersonas", methods=["POST"])
 def get_historial_personas():
     datos = request.json
     connection = conectar()
