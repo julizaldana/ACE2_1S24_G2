@@ -1,0 +1,21 @@
+.tabla-container {
+    padding: 8px;
+    max-height: 392px;
+    /* Tamaño vertical máximo de la tabla */
+    overflow-y: auto;
+    /* Habilita el desplazamiento vertical si se excede el tamaño */
+    text-align: center;
+}
+
+
+.tabla-container thead th {
+    position: sticky;
+    top: 0;
+    color: #fff;
+    background: #3a5d66;  /* fallback for old browsers */
+    text-align: center;
+}
+
+.tabla-container tbody td {
+    text-align: left;
+}

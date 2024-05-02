@@ -1,0 +1,20 @@
+
+FROM node:latest as build
+WORKDIR /usr/local/app
+COPY . .
+RUN npm install
+RUN npm run build --prod
+
+FROM nginx:latest
+COPY --from=build /usr/local/app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf 
+EXPOSE 80
+
+# Iniciar NGINX cuando se inicie el contenedor
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+#Comandos de docker
+#docker build -t jpanaza/frontend_ace2p2_g2:1.0.0 .
+#docker push jpanaza/frontend_ace2p2_g2:1.0.0

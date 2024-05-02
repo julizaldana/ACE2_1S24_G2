@@ -1,0 +1,103 @@
+.navbar {
+  background: #000000b4;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.brand {
+  font-size: 1.5em;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.brand:hover {
+  font-size: 1.5em;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* Botón toogle */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Despliegue centrado del menú */
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    width: 100%;
+    justify-content: center;
+    text-align: center; /* Alinea el texto en el centro */
+  }
+
+  .navbar-nav .nav-item {
+    display: inline-block; /* Mantiene los elementos del menú en línea */
+  }
+}
+
+
+.btn {
+  font-size: 17px;
+  background: transparent;
+  border: none;
+  padding: 0.4em 1em;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+
+.btnactive {
+  font-size: 17px;
+  background: transparent;
+  border: none;
+  padding: 0.4em 1em;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+
+.btnactive::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #ffffff;
+  transition: none;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #ffffff;
+  transition: 0.5s ease;
+}
+
+.btn:hover {
+  color: white;
+  transition-delay: 0.5s;
+}
+
+.btn:hover::before {
+  width: 100%;
+}
+
+.btnactive::before {
+  width: 100%;
+}
