@@ -1,0 +1,296 @@
+{
+	"info": {
+		"_postman_id": "9a1160fb-ae05-4eac-bbb7-8b195a89867a",
+		"name": "API ARQUI 2 PROYECTO 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20637649"
+	},
+	"item": [
+		{
+			"name": "registro login y logout",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "start",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/logs?start=2024-04-25&end=2024-07-25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"logs"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2024-04-25"
+						},
+						{
+							"key": "end",
+							"value": "2024-07-25"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "registro login y logout",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "start",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/logs?start=2024-04-25&end=2024-07-25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"logs"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2024-04-25"
+								},
+								{
+									"key": "end",
+									"value": "2024-07-25"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.1 Python/3.11.9"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 02 May 2024 08:40:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "212"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"FECHA\": \"Thu, 02 May 2024 02:40:19 GMT\",\n        \"ID\": 1,\n        \"NTIPO\": \"LOGIN\",\n        \"TIPO\": 1\n    },\n    {\n        \"FECHA\": \"Thu, 02 May 2024 02:40:26 GMT\",\n        \"ID\": 2,\n        \"NTIPO\": \"LOGOUT\",\n        \"TIPO\": 2\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Alertar",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/alertas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"alertas"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Alertar",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/alertas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"alertas"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.1 Python/3.11.9"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 02 May 2024 08:42:47 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"isAlert\": false,\n    \"message\": \"\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Agregar logs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tipo\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/logs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"logs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "agregar alertas",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message\": \"df\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/alertas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"alertas"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
