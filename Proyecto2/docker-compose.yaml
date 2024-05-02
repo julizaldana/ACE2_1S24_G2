@@ -29,7 +29,7 @@ services:
 
   #SERVICIO DE BACKEND ==============================
   backend:
-    image: jpanaza/backend_ace2p1_g2:latest
+    image: jpanaza/backend_ace2p2_g2:latest
     container_name: backend
     privileged: true
     restart: always
@@ -42,7 +42,7 @@ services:
   
   #SERVICIO DE FRONTEND ==============================
   frontend:
-    image: jpanaza/frontend_ace2p1_g2:latest
+    image: jpanaza/frontend_ace2p2_g2:1.0.0
     container_name: frontend
     restart: always
     networks:

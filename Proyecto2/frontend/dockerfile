@@ -16,5 +16,5 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 #Comandos de docker
-#docker build -t frontend_so1p1_202111478 .
-#docker run -p 80:80 frontend_so1p1_202111478
+#docker build -t jpanaza/frontend_ace2p2_g2:1.0.0 .
+#docker push jpanaza/frontend_ace2p2_g2:1.0.0
