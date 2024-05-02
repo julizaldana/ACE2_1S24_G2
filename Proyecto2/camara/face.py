@@ -1,16 +1,30 @@
 import cv2
 import serial
 import time
+from simple_facerec import SimpleFacerec
+
+# Encode faces from a folder
+sfr = SimpleFacerec()
+sfr.load_encoding_images("images/")
 
 face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 # fourcc= cv2.VideoWriter_fourcc(*'XVID')
-ArduinoSerial = serial.Serial("com2", 9600, timeout=0.1)
+# ArduinoSerial = serial.Serial("com2", 9600, timeout=0.1)
 # out= cv2.VideoWriter('face detection4.avi',fourcc,20.0,(640,480))
 time.sleep(1)
-
 while cap.isOpened():
     ret, frame = cap.read()
+    # Detect Faces
+    face_locations, face_names = sfr.detect_known_faces(frame)
+    for face_loc, name in zip(face_locations, face_names):
+        y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+
+        cv2.putText(frame, name,(x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 200), 2)
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+    cv2.imshow("Proyecto 2 - Grupo 2", frame)
+    
     frame = cv2.flip(frame, 1)  # mirror the image
     # print(frame.shape)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -19,7 +33,7 @@ while cap.isOpened():
         # sending coordinates to Arduino
         string = "X{0:d}Y{1:d}".format((x + w // 2), (y + h // 2))
         print(string)
-        ArduinoSerial.write(string.encode("utf-8"))
+        #ArduinoSerial.write(string.encode("utf-8"))
         # plot the center of the face
         cv2.circle(frame, (x + w // 2, y + h // 2), 2, (0, 255, 0), 2)
         # plot the roi

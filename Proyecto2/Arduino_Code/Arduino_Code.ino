@@ -18,8 +18,8 @@ void Pos()
 {
   if(prevX != x || prevY != y)
   {
-    int servoX = map(x, 600, 0, 70, 179);
-    int servoY = map(y, 450, 0, 179, 95);
+    int servoX = map(x, 640, 0, 70, 179);
+    int servoY = map(y, 480, 0, 179, 95);
     servoX = min(servoX, 179);
     servoX = max(servoX, 70);
     servoY = min(servoY, 179);
