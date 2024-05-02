@@ -13,6 +13,8 @@ const Dashboard = () => {
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
     const [time, setTime] = useState("00:00")
+    const [firstLog, setFirstLog] = useState("")
+    const [lastLog, setLastLog] = useState("")
     const [logs, setLogs] = useState([])
 
 
@@ -57,21 +59,68 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 setLogs(data);
+                calculateTime();
             }
-            else {
-                const response = await fetch(`/api/logs?startDate=${startDate}&endDate=${endDate}`);
+            else if (startDate !== "" && endDate !== "") {
+                const response = await fetch(`/api/logs?start=${startDate}&end=${endDate}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 setLogs(data);
+                calculateTime();
             }
+            else {
+                toast.error('Please select both dates')
+            }
+            
 
         }
         catch (error) {
             console.log('Error fetching data: ',error)
         }
     };
+
+    // Funcion para calcular las horas y minutos 
+
+    const calculateTime = () => {
+        // Ciclo que recorra los logs
+        for (let i = 0; i < logs.length; i++){
+            // Si el tipo de log es 1 (Login)
+            if (logs[i].NTIPO === 1 && firstLog === ""){
+                setFirstLog(logs[i].FECHA)
+            }
+            if (logs[i].NTIPO === 2 && lastLog === ""){
+                setLastLog(logs[i].FECHA)
+                // Calcula la diferencia de tiempo
+                let start = new Date(firstLog)
+                let end = new Date(lastLog)
+                let diff = end - start
+                let hours = Math.floor(diff / 3600000)
+                let minutes = Math.floor((diff % 3600000) / 60000)
+
+                // Obtener la variable time y sumarle las horas y minutos calculadas
+                if (time === "00:00") {
+                    setTime(`${hours}:${minutes}`)
+                }
+                else{
+                    let timeArray = time.split(':')
+                    let newHours = parseInt(timeArray[0]) + hours
+                    let newMinutes = parseInt(timeArray[1]) + minutes
+                    if (newMinutes >= 60) {
+                        newHours += 1
+                        newMinutes -= 60
+                    }
+                    setTime(`${newHours}:${newMinutes}`)
+                }
+
+                // Reiniciar las variables
+                setFirstLog("")
+                setLastLog("")
+            }
+
+        }
+    }
 
     const handleStartDate = (value) => {
         setStartDate(value)
@@ -83,8 +132,8 @@ const Dashboard = () => {
 
     const header = ['ID', 'FECHA','NTIPO', 'TIPO'];
     //const data = [
-    //    { ID: 1, FECHA: '2024-02-16', 'NTIPO' : 1 ,'TIPO': 'Login' },
-    //    { ID: 2, FECHA: '2024-02-16', 'NTIPO' : 2,'TIPO': 'Logout' },
+    //    { ID: 1, FECHA: '2024-02-16 15:60:60', 'NTIPO' : 1 ,'TIPO': 'Login' },
+    //    { ID: 2, FECHA: '2024-02-16 15:60:60', 'NTIPO' : 2,'TIPO': 'Logout' },
         // Agrega más filas según sea necesario
     //];
 
