@@ -1,0 +1,20 @@
+
+FROM node:latest as build
+WORKDIR /usr/local/app
+COPY . .
+RUN npm install
+RUN npm run build --prod
+
+FROM nginx:latest
+COPY --from=build /usr/local/app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf 
+EXPOSE 80
+
+# Iniciar NGINX cuando se inicie el contenedor
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+#Comandos de docker
+#docker build -t frontend_so1p1_202111478 .
+#docker run -p 80:80 frontend_so1p1_202111478
