@@ -16,5 +16,5 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 #Comandos de docker
-#docker build -t jpanaza/frontend_ace2p2_g2:1.0.1 .
-#docker push jpanaza/frontend_ace2p2_g2:1.0.1
+#docker build -t jpanaza/frontend_ace2p2_g2:1.0.11 .
+#docker push jpanaza/frontend_ace2p2_g2:1.0.11

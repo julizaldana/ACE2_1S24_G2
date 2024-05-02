@@ -5,16 +5,14 @@ import Card from '../components/card';
 import '../css/dashboard.css';
 import DateComponent from '../components/date';
 import Tabla from '../components/tabla';
-import {ToastContainer, toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
 
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
-    const [time, setTime] = useState("00:00")
-    const [firstLog, setFirstLog] = useState("")
-    const [lastLog, setLastLog] = useState("")
+    const [time, setTime] = useState("00:00:00")
     const [logs, setLogs] = useState([])
 
 
@@ -31,7 +29,7 @@ const Dashboard = () => {
     }, []);
 
     const fetchAlert = async () => {
-        try{
+        try {
             const response = await fetch('/api/alertas');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -42,7 +40,7 @@ const Dashboard = () => {
             }
 
         } catch (error) {
-            console.log('Error fetching data: ',error)
+            console.log('Error fetching data: ', error)
         }
     }
 
@@ -51,7 +49,7 @@ const Dashboard = () => {
     // FUNCION PARA OBTENER LOS LOGS ---------------------------------------------
 
     const fetchLogs = async () => {
-        try{
+        try {
             if (startDate === "" && endDate === "") {
                 const response = await fetch('/api/logs');
                 if (!response.ok) {
@@ -59,7 +57,8 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 setLogs(data);
-                calculateTime();
+                console.log(data);
+                calculateTime(data);
             }
             else if (startDate !== "" && endDate !== "") {
                 const response = await fetch(`/api/logs?start=${startDate}&end=${endDate}`);
@@ -68,59 +67,96 @@ const Dashboard = () => {
                 }
                 const data = await response.json();
                 setLogs(data);
-                calculateTime();
+                console.log(data);
+                calculateTime(data);
             }
             else {
                 toast.error('Please select both dates')
             }
-            
+
+
 
         }
         catch (error) {
-            console.log('Error fetching data: ',error)
+            console.log('Error fetching data: ', error)
         }
     };
 
     // Funcion para calcular las horas y minutos 
 
-    const calculateTime = () => {
-        // Ciclo que recorra los logs
-        for (let i = 0; i < logs.length; i++){
-            // Si el tipo de log es 1 (Login)
-            if (logs[i].NTIPO === 1 && firstLog === ""){
-                setFirstLog(logs[i].FECHA)
+// Función auxiliar para formatear los valores de tiempo
+const formatTimeValue = (value) => {
+    return value < 10 ? `0${value}` : `${value}`;
+};
+
+// Función principal para calcular el tiempo
+const calculateTime = (logs) => {
+    setTime("00:00:00");
+    let firstLogTemp = "";
+    let lastLogTemp = "";
+    let timeTemp = "00:00:00";
+
+    // Ciclo que recorre los logs
+    for (let i = 0; i < logs.length; i++) {
+        // Si el tipo de log es 1 (Login)            
+        console.log(logs[i].FECHA);
+        if (logs[i].TIPO === 1 && firstLogTemp === "") {
+            firstLogTemp = logs[i].FECHA;
+        }
+        else if (logs[i].TIPO === 2 && lastLogTemp === "") {
+            lastLogTemp = logs[i].FECHA;
+            console.log("primer log", firstLogTemp);
+
+            // Calcula la diferencia de tiempo
+            let start = new Date(firstLogTemp);
+            let end = new Date(lastLogTemp);
+            let diff = end - start;
+            let hours = Math.floor(diff / 3600000);
+            let minutes = Math.floor((diff % 3600000) / 60000);
+            let seconds = Math.floor((diff % 60000) / 1000);
+
+            // Formatear los valores de tiempo
+            const formattedHours = formatTimeValue(hours);
+            const formattedMinutes = formatTimeValue(minutes);
+            const formattedSeconds = formatTimeValue(seconds);
+
+            // Obtener la variable time y sumarle las horas y minutos calculadas
+            if (timeTemp === "00:00:00") {
+                timeTemp = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
             }
-            if (logs[i].NTIPO === 2 && lastLog === ""){
-                setLastLog(logs[i].FECHA)
-                // Calcula la diferencia de tiempo
-                let start = new Date(firstLog)
-                let end = new Date(lastLog)
-                let diff = end - start
-                let hours = Math.floor(diff / 3600000)
-                let minutes = Math.floor((diff % 3600000) / 60000)
-
-                // Obtener la variable time y sumarle las horas y minutos calculadas
-                if (time === "00:00") {
-                    setTime(`${hours}:${minutes}`)
+            else {
+                let timeArray = timeTemp.split(':');
+                let newHours = parseInt(timeArray[0]) + hours;
+                let newMinutes = parseInt(timeArray[1]) + minutes;
+                let newSeconds = parseInt(timeArray[2]) + seconds;
+                if (newMinutes >= 60) {
+                    newHours += 1;
+                    newMinutes -= 60;
                 }
-                else{
-                    let timeArray = time.split(':')
-                    let newHours = parseInt(timeArray[0]) + hours
-                    let newMinutes = parseInt(timeArray[1]) + minutes
-                    if (newMinutes >= 60) {
-                        newHours += 1
-                        newMinutes -= 60
-                    }
-                    setTime(`${newHours}:${newMinutes}`)
+                if (newSeconds >= 60) {
+                    newMinutes += 1;
+                    newSeconds -= 60;
                 }
 
-                // Reiniciar las variables
-                setFirstLog("")
-                setLastLog("")
+                // Formatear los nuevos valores de tiempo
+                const formattedNewHours = formatTimeValue(newHours);
+                const formattedNewMinutes = formatTimeValue(newMinutes);
+                const formattedNewSeconds = formatTimeValue(newSeconds);
+                timeTemp = `${formattedNewHours}:${formattedNewMinutes}:${formattedNewSeconds}`;
+
+                setTime(timeTemp);
             }
 
+            // Reiniciar las variables
+            firstLogTemp = "";
+            lastLogTemp = "";
+        }
+        else {
+            console.log("no se metio", logs[i].TIPO);
         }
     }
+};
+
 
     const handleStartDate = (value) => {
         setStartDate(value)
@@ -130,11 +166,11 @@ const Dashboard = () => {
         setEndDate(value)
     };
 
-    const header = ['ID', 'FECHA','NTIPO', 'TIPO'];
+    const header = ['ID', 'FECHA', 'NTIPO', 'TIPO'];
     //const data = [
     //    { ID: 1, FECHA: '2024-02-16 15:60:60', 'NTIPO' : 1 ,'TIPO': 'Login' },
     //    { ID: 2, FECHA: '2024-02-16 15:60:60', 'NTIPO' : 2,'TIPO': 'Logout' },
-        // Agrega más filas según sea necesario
+    // Agrega más filas según sea necesario
     //];
 
     return (
