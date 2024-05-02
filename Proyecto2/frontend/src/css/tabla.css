@@ -1,6 +1,6 @@
 .tabla-container {
     padding: 8px;
-    max-height: 392px;
+    max-height: 80vh;
     /* Tamaño vertical máximo de la tabla */
     overflow-y: auto;
     /* Habilita el desplazamiento vertical si se excede el tamaño */
