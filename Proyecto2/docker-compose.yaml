@@ -26,16 +26,29 @@ services:
       - my_network
     ports:
       - 8080:8080
-  
+  #SERVICIO DE BACKEND ==============================
+  backend:
+    image: jpanaza/backend_ace2p2_g2:1.0.2
+    container_name: backend
+    privileged: true
+    restart: always
+    networks:
+      - my_network
+    ports:
+      - 5000:5000
+    depends_on:
+      - db  
   #SERVICIO DE FRONTEND ==============================
   frontend:
-    image: jpanaza/frontend_ace2p2_g2:1.0.1
+    image: jpanaza/frontend_ace2p2_g2:1.0.11
     container_name: frontend
     restart: always
     networks:
       - my_network
     ports:
       - 3000:80
+    depends_on:
+      - backend
 networks:
   my_network:
 volumes:

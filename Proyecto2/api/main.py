@@ -13,7 +13,7 @@ ALERTS = []  # ["dfasdf", ""]
 def conectar():
     return mysql.connector.connect(
         host="db",
-        port="3310",
+        port="3306",
         user="root",
         password="1234",
         database="proyecto2",
@@ -42,8 +42,11 @@ def get_logs():
 
     connection = conectar()
     mycursor = connection.cursor()
-    sql = f"""SELECT * FROM logs as l
+    if (start != None or end != None):
+        sql = f"""SELECT * FROM logs as l
                 WHERE {condicion_fechas} ORDER BY l.FECHA"""
+    else:
+        sql = f"""SELECT * FROM logs as l ORDER BY l.FECHA"""
     mycursor.execute(sql, values)
     logs = mycursor.fetchall()
     response = []

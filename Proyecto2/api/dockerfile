@@ -15,3 +15,7 @@ ENV FLASK_RUN_HOST 0.0.0.0
 EXPOSE 5000
 
 CMD ["flask", "run"]
+
+#Comandos de docker
+#docker build -t jpanaza/backend_ace2p2_g2:1.0.2 .
+#docker push jpanaza/backend_ace2p2_g2:1.0.2
